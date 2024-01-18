@@ -24,22 +24,23 @@ class customer (models.Model):
         
 
 
-class product (models.Model):
-    name = models.CharField(max_length=50)
-    price = models.DecimalField(default=0 ,decimal_places=2 ,max_digits=7 )
-    description = models.TextField(max_length=500, null=True, blank=True ,default='')
-    image = models.ImageField(upload_to='images/', null=True, blank=True)
-    category = models.ForeignKey(category, on_delete=models.CASCADE)
-    is_sale = models.BooleanField(default=False)
-    sale_price = models.DecimalField(default=0 ,decimal_places=2 ,max_digits=7 )
+class Product(models.Model):
+	name = models.CharField(max_length=100)
+	price = models.DecimalField(default=0, decimal_places=2, max_digits=6)
+	category = models.ForeignKey(category, on_delete=models.CASCADE, default=1)
+	description = models.CharField(max_length=250, default='', blank=True, null=True)
+	image = models.ImageField(upload_to='uploads/product/')
+	# Add Sale Stuff
+	is_sale = models.BooleanField(default=False)
+	sale_price = models.DecimalField(default=0, decimal_places=2, max_digits=6)
 
-    def __str__(self):
-        return self.name      
+	def __str__(self):
+		return self.name     
 
 
 
 class order (models.Model):
-    product = models.ForeignKey(product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     customer = models.ForeignKey(customer, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     price = models.IntegerField()

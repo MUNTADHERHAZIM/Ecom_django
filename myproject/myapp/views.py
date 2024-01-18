@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from .models import category, product, order, customer
+from .models import category, Product, order, customer
 from django.contrib.auth import logout, authenticate, login
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -10,12 +10,24 @@ from .forms import SignUpForm
 
 # Create your views here.
 
+def category_detail(request, foo):
+    foo = foo.replace('-', ' ')
+    try:
+        category_instance = category.objects.get(name=foo)
+        products = Product.objects.filter(category=category_instance)
+        return render(request, 'category.html', {'products': products, 'category': category_instance})
+    
+    except category.DoesNotExist:
+        messages.success(request, "Invalid category")
+        return redirect('home')
+
+
 def product_detail(request, pk):
-    product_instance = product.objects.get(id=pk)
+    product_instance = Product.objects.get(id=pk)
     return render(request, 'product.html', {'product': product_instance})
 
 def home(request):
-    products = product.objects.all()
+    products = Product.objects.all()
     context = {'products': products}
     return render(request, 'home.html', context)
 

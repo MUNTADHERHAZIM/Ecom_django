@@ -2,7 +2,8 @@
 from statistics import StatisticsError
 from tracemalloc import Statistic
 from django.urls import path , include
-from . import views 
+from . import views
+
 from django.conf import settings
 from django.conf.urls.static import static as statistics
 from django.conf.urls.static import static
@@ -14,12 +15,10 @@ urlpatterns = [
     path("logout/", views.logout_user , name = "logout"),
     path("register/", views.register_user , name = "register"),
     path("product/<int:pk>", views.product_detail, name="product"),
-
-    
-    
+    path("category/<str:foo>", views.category_detail, name="category"),
     
 
-] + statistics(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)   
+]  
 
 
 if settings.DEBUG:

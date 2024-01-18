@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "myapp.apps.MyappConfig", # Add this line to INSTALLED_APPS 
+    "cart.apps.CartConfig", # Add this line to INSTALLED_APPS
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "cart.context_processors.cart", # Add this line to TEMPLATES "context_processors" list  
             ],
         },
     },
@@ -109,8 +111,12 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
-MADIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+# settings.py
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
 
 
 

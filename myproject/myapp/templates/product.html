@@ -27,11 +27,15 @@
                         <div class="alert alert-success"
                         <strong>{{product.price}}</strong>
                         </div>
+                        <br/> id: {{product.id}}
                         {% endif %}
                         <br/><br/>
 
 
-                        <a href="{% url 'home' %}" class="btn btn-primary">home peage</a>
+                        <a href="{% url 'home' %}" class="btn btn-secondary">home peage</a>
+                        {% csrf_token %}
+                        <!-- Other form fields and elements -->
+                        <button type="button" id="add-cart" class="btn btn-secondary"  value="{{ product.id }}" >Add to Cart</button>
                       </center> 
                     </div>
                   </div>
@@ -41,11 +45,46 @@
                 <br/><br/>  <br/><br/>
                 <br/><br/> 
                 <br/><br/>
-                <br/><br/>  <br/><br/>
-                <br/><br/>  <br/><br/>
-                <br/><br/>  <br/><br/>
-                <br/><br/>  <br/><br/>
-                <br/><br/>  <br/><br/>
-                <br/><br/>  <br/><br/>
+                <br/><br/>  
+                <br/><br/>  
+                <br/><br/>  
+                <br/><br/>  
+                <br/><br/>  
+                <br/><br/>  
+                <br/><br/>
+                <br/><br/>
+                <br/><br/>
+                <br/><br/>
+                <br/><br/>
+                <br/><br/>
                 <br/><br/> 
-{% endblock %}
+
+
+
+<script>
+$(document).on('click', '#add-cart', function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '{% url 'cart_add' %}',
+            data: {
+                product_id: $('#add-cart').val(),
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'post'
+            },
+            success: function (json) {
+                
+                document.getElementById("cart_quantity").textContent = json.qty;
+            },
+            error: function (xhr, errmsg, err) {
+              
+            }
+        });
+    });
+</script>
+
+              
+    
+  
+  
+  {% endblock %}
