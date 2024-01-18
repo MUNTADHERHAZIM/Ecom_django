@@ -18,15 +18,23 @@ class Cart:
         product_id = str(product.id)
         product_qty = int(quantity)  # Ensure quantity is an integer
         # Logic
-        if product_id not in self.cart:
-            self.cart[product_id] = product_qty
+        if product_id  in self.cart:
+            pass
         else:
-            self.cart[product_id] += product_qty
+            self.cart[product_id] = int(product_qty)
 
         self.session.modified = True
 
     def __len__(self):
-        return sum(self.cart.values())
+        return len(self.cart)
+    
+    def get_prods(self):
+        # Get ids of products in cart
+        product_ids = self.cart.keys()
+        
+        # Get the product objects and return them   
+        products = Product.objects.filter(id__in=product_ids)
+        return products 
 
 def cart_delete(self, product):
         # Implement logic for deleting a product from the cart

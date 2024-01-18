@@ -7,7 +7,15 @@ from django.contrib import messages
 def cart_summary(request):
 	# Get the cart
 	cart = Cart(request)
-	return render(request, 'cart_summary.html', {})
+	# Get the products
+	cart_products = cart.get_prods()
+	
+	# Get the total price
+	total_price = 0
+	for product in cart_products:
+		total_price += product.price * cart.cart[str(product.id)]
+
+	return render(request, "cart_summary.html", {'cart_products': cart_products , 'total_price': total_price})
 
 
 
@@ -19,11 +27,13 @@ def cart_add(request):
 	if request.POST.get('action') == 'post':
 		# Get stuff
 		product_id = int(request.POST.get('product_id'))
+		
 
 		# lookup product in DB
 		product = get_object_or_404(Product, id=product_id)
 		
 		# Save to session
+		cart.add(product=product , quantity=1)
 
 		# Get Cart Quantity
 		cart_quantity = cart.__len__()

@@ -1,13 +1,76 @@
 {% extends 'base.html' %}
 {% block content %}
-        <!-- Header-->
-        <header class="bg-dark py-5">
-            <div class="container px-4 px-lg-5 my-5">
-                <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder"> welcome to cart page </h1>
-                    <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage muntadher </p>
+    <!-- Header-->
+    <header class="bg-dark py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="display-4 fw-bolder"> Welcome to the Cart Page </h1>
+                <p class="lead fw-normal text-white-50 mb-0">Explore your shopping cart items</p>
+            </div>
+        </div>
+    </header>
+    <!-- Section-->
+    <div class="container">
+        {% for product in cart_products %}
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="{{ product.image.url }}" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <center>
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text">{{ product.description }}</p>
+                                
+                                {% if product.is_sale %}
+                                    <div class="alert alert-success">
+                                        <strike>{{ product.price }}</strike>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <strong>{{ product.sale_price }}</strong>
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-success">
+                                        <strong>{{ product.price }}</strong>
+                                    </div>
+                                    <br/> id: {{ product.id }}
+                                {% endif %}
+                                <br/><br/>
+                                
+                                <a href="{% url 'home' %}" class="btn btn-secondary">Home Page</a>
+                            
+                            </center>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </header>
-        
+            <br/>
+            <br/>
+        {% endfor %}
+    </div>
+
+    <script>
+        $(document).on('click', '.add-to-cart', function (e) {
+            e.preventDefault();
+            var product_id = $(this).val();
+            var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+
+            $.ajax({
+                type: 'POST',
+                url: '{% url 'cart_add' %}',
+                data: {
+                    product_id: product_id,
+                    csrfmiddlewaretoken: csrftoken,
+                    action: 'post'
+                },
+                success: function (json) {
+                    document.getElementById("cart_quantity").textContent = json.cart_quantity;
+                },
+                error: function (xhr, errmsg, err) {
+                    console.log(err);
+                }
+            });
+        });
+    </script>
+
 {% endblock %}
